@@ -20,14 +20,18 @@ public class MyStatefulFlatMap extends RichFlatMapFunction<String, Long> {
 
   ValueState<Long> counterState;
 
+
+
   @Override
   public void open(Configuration parameters) throws Exception {
     ValueStateDescriptor<Long> descriptor = new ValueStateDescriptor<>("Counter", Types.LONG);
+    System.out.println("start open function");
     this.counterState = getRuntimeContext().getState(descriptor);
   }
 
   @Override
   public void flatMap(String s, Collector<Long> collector) throws Exception {
+    System.out.println("s: " + s);
     Long count = 0L;
     if (this.counterState.value() != null) {
       count = this.counterState.value();

@@ -49,6 +49,9 @@ class MyStatefulFlatMapTest {
         Lists.newArrayList(new StreamRecord<>(1L, 10), new StreamRecord<>(2L, 20)),
         testHarness.extractOutputStreamRecords());
 
+    testHarness.extractOutputStreamRecords().forEach(x -> {
+      System.out.println(x);
+    });
     // test other record
     testHarness.processElement("c", 30);
     testHarness.processElement("d", 40);
