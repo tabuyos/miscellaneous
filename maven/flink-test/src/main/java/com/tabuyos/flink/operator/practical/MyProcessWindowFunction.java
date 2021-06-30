@@ -18,7 +18,7 @@ import java.util.concurrent.atomic.AtomicLong;
  * @since 2021/6/30
  */
 public class MyProcessWindowFunction
-    extends ProcessWindowFunction<Tuple3<String, String, Long>, Double, String, GlobalWindow> {
+    extends ProcessWindowFunction<Tuple3<String, String, Long>, Double, String, TimeWindow> {
 
   @Override
   public void process(
@@ -27,7 +27,6 @@ public class MyProcessWindowFunction
       Iterable<Tuple3<String, String, Long>> elements,
       Collector<Double> out)
       throws Exception {
-    System.out.println(key);
     AtomicLong sum = new AtomicLong();
     AtomicLong count = new AtomicLong();
     elements.forEach(
