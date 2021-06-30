@@ -20,8 +20,6 @@ public class MyStatefulFlatMap extends RichFlatMapFunction<String, Long> {
 
   ValueState<Long> counterState;
 
-
-
   @Override
   public void open(Configuration parameters) throws Exception {
     ValueStateDescriptor<Long> descriptor = new ValueStateDescriptor<>("Counter", Types.LONG);

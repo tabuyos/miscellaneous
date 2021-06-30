@@ -56,15 +56,22 @@ public class UserDetails {
     this.remark = remark;
   }
 
-
   @Override
   public String toString() {
-    return "UserDetails{" +
-      "id=" + id +
-      ", username='" + username + '\'' +
-      ", password='" + password + '\'' +
-      ", age=" + age +
-      ", remark='" + remark + '\'' +
-      '}';
+    return "UserDetails{"
+        + "id="
+        + id
+        + ", username='"
+        + username
+        + '\''
+        + ", password='"
+        + password
+        + '\''
+        + ", age="
+        + age
+        + ", remark='"
+        + remark
+        + '\''
+        + '}';
   }
 }

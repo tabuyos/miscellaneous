@@ -25,7 +25,9 @@ public class UserDetailsRepository {
   }
 
   public List<UserDetails> getAllUserDetails() {
-    List<UserDetails> list = jdbcTemplate.query("select * from user_details", new BeanPropertyRowMapper<>(UserDetails.class));
+    List<UserDetails> list =
+        jdbcTemplate.query(
+            "select * from user_details", new BeanPropertyRowMapper<>(UserDetails.class));
     return list;
   }
 }

@@ -25,7 +25,8 @@ public class UserRepository {
   }
 
   public List<User> getAllUser() {
-    return jdbcTemplate.query("select * from user_details", new BeanPropertyRowMapper<>(User.class));
+    return jdbcTemplate.query(
+        "select * from user_details", new BeanPropertyRowMapper<>(User.class));
   }
 
   public boolean insert() {

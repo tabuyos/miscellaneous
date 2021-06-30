@@ -26,5 +26,4 @@ public class UserDetailsService {
   public List<UserDetails> getAllUserDetails() {
     return userDetailsRepository.getAllUserDetails();
   }
-
 }

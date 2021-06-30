@@ -5,8 +5,6 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 /**
  * TODO
  *
@@ -15,18 +13,16 @@ import static org.junit.jupiter.api.Assertions.*;
  */
 class MyStatelessMapTest {
 
-    @BeforeEach
-    void setUp() {
-    }
+  @BeforeEach
+  void setUp() {}
 
-    @AfterEach
-    void tearDown() {
-    }
+  @AfterEach
+  void tearDown() {}
 
-    @Test
-    void map() throws Exception {
-        MyStatelessMap statelessMap = new MyStatelessMap();
-        String out = statelessMap.map("tabuyos");
-        Assertions.assertEquals("Hello, tabuyos", out);
-    }
+  @Test
+  void map() throws Exception {
+    MyStatelessMap statelessMap = new MyStatelessMap();
+    String out = statelessMap.map("tabuyos");
+    Assertions.assertEquals("Hello, tabuyos", out);
+  }
 }

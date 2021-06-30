@@ -11,8 +11,6 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 /**
  * TODO
  *
@@ -21,35 +19,29 @@ import static org.junit.jupiter.api.Assertions.*;
 class TimerProcessFunctionTest {
 
   private OneInputStreamOperatorTestHarness<String, String> testHarness;
-  private TimerProcessFunction                              processFunction;
+  private TimerProcessFunction processFunction;
 
   @BeforeEach
   void setUp() throws Exception {
     processFunction = new TimerProcessFunction();
 
     // KeyedOneInputStreamOperatorTestHarness 需要三个参数：算子对象、键 Selector、键类型
-    testHarness = new KeyedOneInputStreamOperatorTestHarness<>(
-      new KeyedProcessOperator<>(processFunction),
-      x -> "1",
-      Types.STRING
-    );
+    testHarness =
+        new KeyedOneInputStreamOperatorTestHarness<>(
+            new KeyedProcessOperator<>(processFunction), x -> "1", Types.STRING);
     // Function time is initialized to 0
     testHarness.open();
   }
 
   @AfterEach
-  void tearDown() {
-  }
+  void tearDown() {}
 
   @Test
   void processElement() throws Exception {
     testHarness.processElement("world", 10);
     Assertions.assertEquals(
-      Lists.newArrayList(
-        new StreamRecord<>("hello world", 10)
-      ),
-      testHarness.extractOutputStreamRecords()
-    );
+        Lists.newArrayList(new StreamRecord<>("hello world", 10)),
+        testHarness.extractOutputStreamRecords());
   }
 
   @Test
@@ -61,11 +53,9 @@ class TimerProcessFunctionTest {
     // Function time 设置为 50
     testHarness.setProcessingTime(50);
     Assertions.assertEquals(
-      Lists.newArrayList(
-        new StreamRecord<>("hello world", 10),
-        new StreamRecord<>("Timer triggered at timestamp 50")
-      ),
-      testHarness.extractOutputStreamRecords()
-    );
+        Lists.newArrayList(
+            new StreamRecord<>("hello world", 10),
+            new StreamRecord<>("Timer triggered at timestamp 50")),
+        testHarness.extractOutputStreamRecords());
   }
 }

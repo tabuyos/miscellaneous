@@ -13,7 +13,8 @@ import org.apache.flink.util.Collector;
  */
 public class TimerProcessFunction extends KeyedProcessFunction<String, String, String> {
   @Override
-  public void processElement(String s, Context context, Collector<String> collector) throws Exception {
+  public void processElement(String s, Context context, Collector<String> collector)
+      throws Exception {
     context.timerService().registerProcessingTimeTimer(50);
     String out = "hello " + s;
     collector.collect(out);
