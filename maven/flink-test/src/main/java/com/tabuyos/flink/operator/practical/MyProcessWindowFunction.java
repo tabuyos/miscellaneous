@@ -3,9 +3,9 @@
  */
 package com.tabuyos.flink.operator.practical;
 
+import org.apache.flink.api.common.functions.RichFunction;
 import org.apache.flink.api.java.tuple.Tuple3;
 import org.apache.flink.streaming.api.functions.windowing.ProcessWindowFunction;
-import org.apache.flink.streaming.api.windowing.windows.GlobalWindow;
 import org.apache.flink.streaming.api.windowing.windows.TimeWindow;
 import org.apache.flink.util.Collector;
 
@@ -18,7 +18,7 @@ import java.util.concurrent.atomic.AtomicLong;
  * @since 2021/6/30
  */
 public class MyProcessWindowFunction
-    extends ProcessWindowFunction<Tuple3<String, String, Long>, Double, String, TimeWindow> {
+    extends ProcessWindowFunction<Tuple3<String, String, Long>, Double, String, TimeWindow> implements RichFunction {
 
   @Override
   public void process(

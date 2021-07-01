@@ -6,12 +6,10 @@ import org.apache.flink.api.common.typeinfo.BasicTypeInfo;
 import org.apache.flink.api.common.typeinfo.TypeHint;
 import org.apache.flink.api.common.typeinfo.TypeInformation;
 import org.apache.flink.api.java.tuple.Tuple3;
-import org.apache.flink.runtime.checkpoint.OperatorSubtaskState;
 import org.apache.flink.streaming.api.operators.OneInputStreamOperator;
-import org.apache.flink.streaming.api.watermark.Watermark;
 import org.apache.flink.streaming.api.windowing.assigners.EventTimeSessionWindows;
 import org.apache.flink.streaming.api.windowing.time.Time;
-import org.apache.flink.streaming.api.windowing.triggers.EventTimeTrigger;
+import org.apache.flink.streaming.api.windowing.triggers.ProcessingTimeTrigger;
 import org.apache.flink.streaming.api.windowing.windows.TimeWindow;
 import org.apache.flink.streaming.runtime.operators.windowing.WindowOperator;
 import org.apache.flink.streaming.runtime.operators.windowing.functions.InternalIterableProcessWindowFunction;
@@ -31,7 +29,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
  * @author bjliu(a.k.a tabuyos)
  * @since 2021/6/30
  */
-class MyProcessWindowFunctionTest {
+class MyProcessWindowFunctionTestProcessing {
 
   public static Tuple3<String, String, Long>[] ENGLISH = null;
   private static final TypeInformation<Tuple3<String, String, Long>> STRING_INT_TUPLE =
@@ -73,7 +71,7 @@ class MyProcessWindowFunctionTest {
                 BasicTypeInfo.STRING_TYPE_INFO.createSerializer(new ExecutionConfig()),
                 stateDesc,
                 new InternalIterableProcessWindowFunction<>(new MyProcessWindowFunction()),
-                EventTimeTrigger.create(),
+                ProcessingTimeTrigger.create(),
                 0,
                 null);
     OneInputStreamOperatorTestHarness<Tuple3<String, String, Long>, Double> testHarness =
@@ -81,28 +79,14 @@ class MyProcessWindowFunctionTest {
     ConcurrentLinkedQueue<StreamRecord<Double>> expectedOutput = new ConcurrentLinkedQueue<>();
     testHarness.open();
 
+    testHarness.setProcessingTime(3);
     testHarness.processElement(new StreamRecord<>(Tuple3.of("class1", "张三", 100L), 10));
     testHarness.processElement(new StreamRecord<>(Tuple3.of("class1", "李四", 78L), 20));
-    testHarness.processElement(new StreamRecord<>(Tuple3.of("class2", "赵六", 81L), 30));
-
-    OperatorSubtaskState snapshot = testHarness.snapshot(0L, 0L);
-    // 关闭流
-    testHarness.close();
-
-    // 创建新流
-    testHarness = createTestHarness(operator);
-    testHarness.setup();
-    // 恢复之前的状态
-    testHarness.initializeState(snapshot);
-    testHarness.open();
-
     testHarness.processElement(new StreamRecord<>(Tuple3.of("class1", "王五", 99L), 40));
+    testHarness.processElement(new StreamRecord<>(Tuple3.of("class2", "赵六", 81L), 30));
     testHarness.processElement(new StreamRecord<>(Tuple3.of("class2", "小七", 59L), 50));
-
-    testHarness.processWatermark(new Watermark(12000));
-
     testHarness.processElement(new StreamRecord<>(Tuple3.of("class2", "小八", 97L), 60));
-    testHarness.processWatermark(new Watermark(17999));
+    testHarness.setProcessingTime(5000);
 
     expectedOutput.add(new StreamRecord<>(92.0, 5499));
     expectedOutput.add(new StreamRecord<>(70.0, 5499));
